@@ -5,8 +5,8 @@
 
 void draw_grid(sf::RenderWindow& window)
 {
-    float stepsize_x = cfg::window_size.x / (cfg::grid_size.x);
-    float stepsize_y = cfg::window_size.y / (cfg::grid_size.y);
+    float stepsize_x = cfg::square_size.x;
+    float stepsize_y = cfg::square_size.y;
 
     for (int i=1; i < cfg::grid_size.x; i++)
     {
