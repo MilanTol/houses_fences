@@ -14,5 +14,13 @@ struct Square
         fence(0)
     {}
 
-    
+    void drawContent(sf::RenderWindow& window, int column, int row)
+    {
+        if (house != none)
+            draw_house(window, house, column, row);
+
+        if (fence != none)
+            draw_fence(window, fence, column, row);
+    } 
+       
 };
