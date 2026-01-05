@@ -8,7 +8,7 @@ void draw_grid(sf::RenderWindow& window)
     float stepsize_x = cfg::window_size.x / (cfg::grid_size.x);
     float stepsize_y = cfg::window_size.y / (cfg::grid_size.y);
 
-    for (int i=0; i < cfg::grid_size.x + 1; i++)
+    for (int i=1; i < cfg::grid_size.x; i++)
     {
         sf::Vector2f point1;
         sf::Vector2f point2;
@@ -22,7 +22,7 @@ void draw_grid(sf::RenderWindow& window)
         draw_line(window, point1, point2);
     }
 
-    for (int i=0; i < cfg::grid_size.y + 1; i++)
+    for (int i=1; i < cfg::grid_size.y; i++)
     {
         sf::Vector2f point1;
         sf::Vector2f point2;
