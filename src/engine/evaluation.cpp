@@ -8,12 +8,12 @@ int chainlength(Position& position,
 {
     int count = 1;
 
-    for (int i=1; i < count; i++)
+    for (int i=1; i < 4; i++)
     {
         if (
-        column + i*d_column < 0 or column + i*d_column > cfg::grid_size.x 
+        (column + i*d_column < 0) or (column + i*d_column > cfg::grid_size.x - 1) 
         or
-        row + i*d_row < 0 or row + i*d_row > cfg::grid_size.y
+        (row + i*d_row < 0) or (row + i*d_row > cfg::grid_size.y - 1)
         )
             break;
         
@@ -22,17 +22,17 @@ int chainlength(Position& position,
         )
             break;
 
-        count += 1;
+        count += i;
     }
 
-    for (int i=1; i < count; i++)
+    for (int i=1; i < 4; i++)
     {
         i = -i; //reverse direction
 
         if (
-        column * i*d_column < 0 or column + i*d_column > cfg::grid_size.x 
+        (column * i*d_column < 0) or (column + i*d_column > cfg::grid_size.x - 1) 
         or
-        row + i*d_row < 0 or row + i*d_row > cfg::grid_size.y
+        (row + i*d_row < 0) or (row + i*d_row > cfg::grid_size.y - 1)
         )
             break;
         
@@ -41,7 +41,7 @@ int chainlength(Position& position,
         )
             break;
 
-        count += 1;
+        count += i;
     }
 
     return count;
@@ -52,15 +52,15 @@ int chainlength(Position& position,
     int team
 )
 {
-    int result = 0;
-
-    if (position.squares[column][row].house != position.turn.current)
+    if (position.squares[column][row].house != team)
         return 0;
 
-    result += chainlength(position, column, row, 1, 0, team)*chainlength(position, column, row, 1, 0, team);
-    result += chainlength(position, column, row, 0, 1, team)*chainlength(position, column, row, 0, 1, team);
-    result += chainlength(position, column, row, 1, 1, team)*chainlength(position, column, row, 1, 1, team);
-    result += chainlength(position, column, row, 1, -1, team)*chainlength(position, column, row, 1, -1, team);
+    int result = 0;
+
+    result += chainlength(position, column, row, 1, 0, team);
+    // result += chainlength(position, column, row, 0, 1, team)*chainlength(position, column, row, 0, 1, team);
+    // result += chainlength(position, column, row, 1, 1, team)*chainlength(position, column, row, 1, 1, team);
+    // result += chainlength(position, column, row, 1, -1, team)*chainlength(position, column, row, 1, -1, team);
 
     return result;
 }
@@ -92,8 +92,6 @@ float evaluation(Position& position)
     
     return eval;
 };
-
-
 
 
 
