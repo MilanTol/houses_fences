@@ -16,6 +16,21 @@ void processEvents(sf::Window& window, Input& input)
         {
             if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
                 window.close();
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+            {   
+                input.leftPressed = true;
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+            {   
+                input.rightPressed = true;
+            }
+
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+            {   
+                input.downPressed = true;
+            }
         }
         else if (const auto* keyPressed = event->getIf<sf::Event::MouseButtonPressed>())
         {

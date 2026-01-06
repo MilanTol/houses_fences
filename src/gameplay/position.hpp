@@ -40,7 +40,7 @@ struct Position
 
     void destroyFences()
     {
-        if (turn.current == cfg::max_moves-1 and
+        if (turn.move_counter == cfg::max_moves - 1 and
             turn.destroy_counter == 0)
         {
             for (int column = 0; column < cfg::grid_size.x; column++)
