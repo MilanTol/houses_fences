@@ -19,7 +19,7 @@ int main()
     while (window.isOpen())
     {
         processEvents(window, input);
-        position_log.processEvents(input);
+        position_log.processEvents(window, input);
 
         window.clear();
         draw_grid(window);

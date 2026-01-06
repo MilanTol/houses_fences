@@ -1,4 +1,5 @@
 
+#include "../config.hpp"
 #include "../gameplay/position.hpp"
 #include "input.hpp"
 
@@ -11,7 +12,10 @@ struct ColumnRow
 
     ColumnRow(sf::Vector2i position)
     {
-        
+        column = position.x / cfg::square_size.x;
+        row = position.y / cfg::square_size.y;
+
+        std::cout << column << row << std::endl;
     }
 };
 
@@ -44,7 +48,9 @@ public:
         
         else if (input.mouseClicked and displayed_position_id == turns_played) // if clicked
         {   
-            ColumnRow clicked_square = PositionToRowColumn(sf::Mouse::getPosition(window));
+            ColumnRow clicked_square = ColumnRow(sf::Mouse::getPosition(window));
+            std::cout << clicked_square.column << clicked_square.row << std::endl;
+
             displayed_position.playTurn(clicked_square.column, clicked_square.row);
             positions.push_back(displayed_position);
             turns_played += 1;

@@ -63,7 +63,7 @@ struct Position
     }
     
     void playTurn(int column, int row)
-    {
+    {   
         if (squares[column][row].house == 0 and
             squares[column][row].fence != turn.other)
         {
