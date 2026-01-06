@@ -15,4 +15,6 @@ sf::Vector2f constexpr fence_size = {static_cast<float>(square_size.x/1.5), stat
 int const max_moves = 2; 
 int const max_destroy = 1;
 
+int const win_condition = 4;
+
 }
