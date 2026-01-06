@@ -4,27 +4,6 @@
 #include <SFML/Graphics.hpp>
 
 #include "../config.hpp"
-#include "../team.hpp"
-
-struct Square
-{
-    int house;
-    int fence;
-
-    Square():
-        house(0),
-        fence(0)
-    {}
-
-    void drawContent(sf::RenderWindow& window, int column, int row)
-    {
-        if (house != 0)
-            draw_house(window, house, column, row);
-
-        if (fence != 0)
-            draw_fence(window, fence, column, row);
-    }    
-};
 
 void draw_house(sf::RenderWindow& window, int team, sf::Vector2f position)
 {
@@ -53,8 +32,8 @@ void draw_house(sf::RenderWindow& window, int team, int column, int row)
     position.y = row * stepsize_y;
 
     //add discrepancy size of circle and square size
-    position.x += (stepsize_x/2 - cfg::house_size.x);
-    position.y += (stepsize_y/2 - cfg::house_size.y);
+    position.x += (stepsize_x/2 - cfg::house_size.x/2);
+    position.y += (stepsize_y/2 - cfg::house_size.y/2);
 
     draw_house(window, team, position);  
 }
@@ -88,10 +67,30 @@ void draw_fence(sf::RenderWindow& window, int team, int column, int row)
     position.y = row * stepsize_y;
 
     //add discrepancy size of circle and square size
-    position.x += (stepsize_x/2 - cfg::fence_size.x);
-    position.y += (stepsize_y/2 - cfg::fence_size.y);
+    position.x += (stepsize_x/2 - cfg::fence_size.x/2);
+    position.y += (stepsize_y/2 - cfg::fence_size.y/2);
 
     draw_fence(window, team, position);
 }
+
+struct Square
+{
+    int house;
+    int fence;
+
+    Square():
+        house(0),
+        fence(0)
+    {}
+
+    void drawContent(sf::RenderWindow& window, int column, int row)
+    {
+        if (fence != 0)
+            draw_fence(window, fence, column, row);
+
+        if (house != 0)
+            draw_house(window, house, column, row);
+    }    
+};
 
 
