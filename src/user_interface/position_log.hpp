@@ -3,6 +3,9 @@
 #include "../gameplay/position.hpp"
 #include "input.hpp"
 
+#include "../engine/evaluation.hpp"
+
+
 struct ColumnRow
 {
     int column;
@@ -52,6 +55,8 @@ public:
             turns_played += 1;
             displayed_position_id = turns_played;
             input.mouseClicked = false;
+
+            std::cout << evaluation(displayed_position) << std::endl;
         }
         
         if (input.downPressed and turns_played > 0)

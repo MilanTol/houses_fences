@@ -1,20 +1,4 @@
-#pragma once
-
 #include "../gameplay/position.hpp"
-
-float evaluation(Position& position)
-{
-    float eval = 0; //positive means good for player 1, negative means good for player 2.
-
-    // if (checkWin(position))
-    //     eval += (3 - 2*position.turn.current) * 10000; //if player1 wins +10000 else if player2 wins -10000
-    
-    eval += chainlength(position, 1);
-    eval -= chainlength(position, 2);
-    
-    return eval;
-};
-
 
 int chainlength(Position& position, 
     int column, int row, 
@@ -92,7 +76,27 @@ int chainlength(Position& position, int team)
             eval += chainlength(position, column, row, team);
         }
     }
+
+    return eval;
 }
+
+float evaluation(Position& position)
+{
+    float eval = 0; //positive means good for player 1, negative means good for player 2.
+
+    // if (checkWin(position))
+    //     eval += (3 - 2*position.turn.current) * 10000; //if player1 wins +10000 else if player2 wins -10000
+    
+    eval += chainlength(position, 1);
+    eval -= chainlength(position, 2);
+    
+    return eval;
+};
+
+
+
+
+
 
 bool checkStreet(Position& position, 
     int column, int row, 
