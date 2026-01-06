@@ -29,3 +29,4 @@ void processEvents(sf::Window& window, Input& input)
         }
     }   
 }
+
