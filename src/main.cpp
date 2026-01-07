@@ -2,10 +2,12 @@
 
 #include "user_interface/events.hpp"
 #include "graphics/draw_grid.hpp"
+#include "graphics/draw_position.hpp"
 #include "user_interface/position_log.hpp"
 
 #include "config.hpp"
 #include "gameplay/square.hpp"
+
 
 Input input;
 
@@ -23,7 +25,7 @@ int main()
 
         window.clear();
         draw_grid(window);
-        position_log.displayed_position.drawPosition(window);
+        drawPosition(window, position_log.displayed_position);
         window.display();
     }
 }

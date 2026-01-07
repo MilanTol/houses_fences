@@ -8,8 +8,8 @@
 
 struct Square
 {
-    int house;
-    int fence;
+    char house;
+    char fence;
 
     Square():
         house(0),

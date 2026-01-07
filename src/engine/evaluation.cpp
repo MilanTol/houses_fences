@@ -1,5 +1,18 @@
 #include "../gameplay/position.hpp"
 
+float evaluation(Position& position)
+{
+    float eval = 0; //positive means good for player 1, negative means good for player 2.
+
+    // if (checkWin(position))
+    //     eval += (3 - 2*position.turn.current) * 10000; //if player1 wins +10000 else if player2 wins -10000
+    
+    eval += chainlength(position, 1);
+    eval -= chainlength(position, 2);
+    
+    return eval;
+};
+
 int chainlength(Position& position, 
     int column, int row, 
     int d_column, int d_row,
@@ -58,9 +71,9 @@ int chainlength(Position& position,
     int result = 0;
 
     result += chainlength(position, column, row, 1, 0, team);
-    // result += chainlength(position, column, row, 0, 1, team)*chainlength(position, column, row, 0, 1, team);
-    // result += chainlength(position, column, row, 1, 1, team)*chainlength(position, column, row, 1, 1, team);
-    // result += chainlength(position, column, row, 1, -1, team)*chainlength(position, column, row, 1, -1, team);
+    result += chainlength(position, column, row, 0, 1, team)*chainlength(position, column, row, 0, 1, team);
+    result += chainlength(position, column, row, 1, 1, team)*chainlength(position, column, row, 1, 1, team);
+    result += chainlength(position, column, row, 1, -1, team)*chainlength(position, column, row, 1, -1, team);
 
     return result;
 }
@@ -80,18 +93,6 @@ int chainlength(Position& position, int team)
     return eval;
 }
 
-float evaluation(Position& position)
-{
-    float eval = 0; //positive means good for player 1, negative means good for player 2.
-
-    // if (checkWin(position))
-    //     eval += (3 - 2*position.turn.current) * 10000; //if player1 wins +10000 else if player2 wins -10000
-    
-    eval += chainlength(position, 1);
-    eval -= chainlength(position, 2);
-    
-    return eval;
-};
 
 
 

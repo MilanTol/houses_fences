@@ -20,17 +20,6 @@ struct Position
         }
     }
 
-    void drawPosition(sf::RenderWindow& window)
-    {
-        for (int column = 0; column < cfg::grid_size.x; column++)
-        {
-            for (int row = 0; row < cfg::grid_size.y; row++)
-            {
-                squares[column][row].drawContent(window, column, row);
-            }
-        }
-    }
-
     void buildHouse(int column, int row)
     {
         squares[column][row].house = turn.current;
