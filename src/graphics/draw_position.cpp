@@ -20,7 +20,7 @@ void drawPosition(sf::RenderWindow& window, Position& position)
     {
         for (int row = 0; row < cfg::grid_size.y; row++)
         {
-            drawSquareContent(window, position.squares[column][row], column, row);
+            drawSquareContent(window, position.at(column, row), column, row);
         }
     }
 }

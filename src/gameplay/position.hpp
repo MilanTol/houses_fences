@@ -2,12 +2,19 @@
 
 #include "turn.hpp"
 #include "square.hpp"
+#include "move.hpp"
 #include "../config.hpp"
 
 struct Position
 {
-    Square squares[cfg::grid_size.x][cfg::grid_size.y];
+    Square squares[cfg::grid_size.x * cfg::grid_size.y];
     Turn turn;
+
+    //simplify looking up squares by using "at" function.
+    inline Square& at(int column, int row) 
+    {
+        return squares[column + row*cfg::grid_size.x];
+    }
 
     Position()
     {
@@ -15,14 +22,14 @@ struct Position
         {
             for (int row = 0; row < cfg::grid_size.y; row++)
             {
-                squares[column][row] = Square();
+                at(column, row) = Square();
             }
         }
     }
 
-    void buildHouse(int column, int row)
+    void buildHouse(Move& move)
     {
-        squares[column][row].house = turn.current;
+        squares[move.square_id].house = turn.current;
         destroyFences();
         turn.move();
     }
@@ -36,33 +43,34 @@ struct Position
             {
                 for (int row = 0; row < cfg::grid_size.y; row++)
                 {
-                    if (squares[column][row].fence == turn.other)
-                        squares[column][row].fence = 0;
+                    if (at(column, row).fence == turn.other)
+                        at(column, row).fence = 0;
                 }
             }
         }
     }    
 
-    void destroyHouse(int column, int row)
+    void destroyHouse(Move& move)
     {   
-        squares[column][row].house = 0;
-        squares[column][row].fence = turn.current;
+        squares[move.square_id].house = 0;
+        squares[move.square_id].fence = turn.current;
         turn.destroy();
         turn.move();
     }
     
-    void playTurn(int column, int row)
-    {   
-        if (squares[column][row].house == 0 and
-            squares[column][row].fence != turn.other)
+    void execMove(Move move)
+    {
+        if (squares[move.square_id].house == 0 and
+            squares[move.square_id].fence != turn.other)
         {
-            buildHouse(column, row);
+            buildHouse(move);
         }
-        else if (squares[column][row].house == turn.other and
-            squares[column][row].fence != turn.other and
+
+        else if (squares[move.square_id].house == turn.other and
+            squares[move.square_id].fence != turn.other and
             turn.destroy_counter < cfg::max_destroy)
         {
-            destroyHouse(column, row);
+            destroyHouse(move);
         }
     }
 

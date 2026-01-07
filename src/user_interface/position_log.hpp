@@ -1,10 +1,12 @@
 
-#include "../config.hpp"
-#include "../gameplay/position.hpp"
 #include "input.hpp"
 
-#include "../engine/evaluation.hpp"
+#include "../config.hpp"
 
+#include "../gameplay/position.hpp"
+#include "../gameplay/move.hpp"
+
+#include "../engine/evaluation.hpp"
 
 struct ColumnRow
 {
@@ -17,6 +19,11 @@ struct ColumnRow
     {
         column = position.x / cfg::square_size.x;
         row = position.y / cfg::square_size.y;
+    }
+
+    char square_id()
+    {
+        return column + cfg::grid_size.x * row;
     }
 };
 
@@ -50,13 +57,12 @@ public:
         else if (input.mouseClicked and displayed_position_id == turns_played) // if clicked
         {   
             ColumnRow clicked_square = ColumnRow(sf::Mouse::getPosition(window));
-            displayed_position.playTurn(clicked_square.column, clicked_square.row);
+            displayed_position.execMove(Move(clicked_square.column + cfg::grid_size.x * clicked_square.row));
+            
             positions.push_back(displayed_position);
             turns_played += 1;
             displayed_position_id = turns_played;
             input.mouseClicked = false;
-
-            std::cout << evaluation(displayed_position) << std::endl;
         }
         
         if (input.downPressed and turns_played > 0)
