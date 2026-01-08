@@ -1,3 +1,3 @@
 #pragma once
 
-float evaluate(const Position& position);
+int evaluate(const Position& position);

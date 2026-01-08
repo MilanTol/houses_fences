@@ -112,53 +112,29 @@ struct Position
         undoStack.pop_back();
     }
 
-
-
-    std::array<bool, cfg::grid_size.x * cfg::grid_size.y> legalMoves() const
+    std::vector<Move> generateMoves() const
     {
-        std::array<bool, cfg::grid_size.x * cfg::grid_size.y> result;
+        std::vector<Move> moves;
 
         for (int i = 0; i < cfg::grid_size.x * cfg::grid_size.y; i++)
         {
-            if (squares[i].fence != turn.current and squares[i].house == turn.current)
+            if (squares[i].fence != turn.other and squares[i].house != turn.current)
             {
                 //if house is of other player check whether destroy counter is not reached
-                if (squares[i].house == turn.other) 
+                if ((squares[i].house == turn.other) and (turn.destroy_counter < cfg::max_destroy)) 
                 {
-                    result[i] = (turn.destroy_counter < cfg::max_destroy);
+                    moves.push_back(Move(i));
                 }
 
-                else
+                else if (squares[i].house == 0)
                 {
-                    result[i] = true;
+                    moves.push_back(Move(i));
                 }
 
-            }
-
-            else
-            {
-                result[i] = false;
             }
         }
-
-        return result;
-    }
-
-    std::vector<Move> generateMoves() const
-    {   
-        std::vector<Move> moves;
-        auto legal = legalMoves();
-
-        moves.reserve(cfg::grid_size.x * cfg::grid_size.y);
         
-        for (char i = 0; i < legal.size(); i++)
-        {
-            if (legal[i])
-                moves.push_back(Move{i});
-        }
-
         return moves;
     }
-
 
 };

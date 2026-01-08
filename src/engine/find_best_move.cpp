@@ -2,12 +2,14 @@
 #include "../gameplay/position.hpp"
 #include "evaluation.hpp"
 
+constexpr int min_eval = -10000;
+
 int negamax(Position& pos, int depth, int alpha, int beta)
 {
     if (depth == 0)
         return evaluate(pos);
 
-    auto moves = pos.generateMoves();
+    std::vector<Move> moves = pos.generateMoves();
 
     if (moves.empty())
         return evaluate(pos);
@@ -30,14 +32,14 @@ int negamax(Position& pos, int depth, int alpha, int beta)
 Move findBestMove(Position& pos, int depth)
 {
     Move bestMove{};
-    int bestScore = -1000000;
+    int bestScore = min_eval;
 
-    auto moves = pos.generateMoves();
+    std::vector<Move> moves = pos.generateMoves();
 
     for (const Move& m : moves)
     {
         pos.makeMove(m);
-        int score = -negamax(pos, depth - 1, -1000000, 1000000);
+        int score = -negamax(pos, depth - 1, min_eval, -min_eval);
         pos.undoMove();
 
         if (score > bestScore)

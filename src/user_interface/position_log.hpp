@@ -66,8 +66,27 @@ public:
             displayed_position_id = turns_played;
             input.mouseClicked = false;
 
-            std::cout << evaluate(displayed_position) << std::endl;
-            std::cout << findBestMove(displayed_position, 1).square << std::endl;
+            if (displayed_position.turn.current == 2)
+            {               
+            int depth = 6;
+            
+            Move bestMove = findBestMove(displayed_position, depth);
+            displayed_position.makeMove(bestMove);
+
+            positions.push_back(displayed_position);
+            turns_played += 1;
+            displayed_position_id = turns_played;
+
+            bestMove = findBestMove(displayed_position, depth);
+            displayed_position.makeMove(bestMove);
+
+            positions.push_back(displayed_position);
+            turns_played += 1;
+            displayed_position_id = turns_played;
+
+            int eval = negamax(displayed_position, depth, -10000, 10000);
+            std::cout << eval << std::endl;
+            }
         }
         
         if (input.downPressed and turns_played > 0)
