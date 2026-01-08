@@ -33,7 +33,6 @@ struct Position
     void buildHouse(const Move& move)
     {
         squares[move.square].house = turn.current;
-        destroyFences();
         turn.move();
     }
 
@@ -68,9 +67,8 @@ struct Position
         undo.oldTurn = turn;
 
         //check whether fences will be destroyed --> store squares on which fences were removed.
-        if (squares[move.square].house == turn.other &&
-             squares[move.square].fence != turn.other &&
-             turn.destroy_counter < cfg::max_destroy)
+        if (squares[move.square].house == 0 and
+            squares[move.square].fence != turn.other)
         {
             for (int i=0; i < cfg::grid_size.x * cfg::grid_size.y; i++)
             {
@@ -86,6 +84,7 @@ struct Position
         if (squares[move.square].house == 0 and
             squares[move.square].fence != turn.other)
         {
+            destroyFences();
             buildHouse(move);
         }
 
@@ -104,10 +103,11 @@ struct Position
         squares[u.square].house = u.oldHouse;
         squares[u.square].fence = u.oldFence;
 
+        turn = u.oldTurn;
+
         for (int square_id : u.clearedFences)
             squares[square_id].fence = turn.other;
 
-        turn = u.oldTurn;
 
         undoStack.pop_back();
     }
