@@ -4,7 +4,7 @@
 
 constexpr int min_eval = -10000;
 
-int negamax(Position& pos, int depth, int alpha, int beta)
+int negamax(Position& pos, int depth, int alpha, int beta, int movesMadeThisTurn = 0)
 {
     if (depth == 0)
         return evaluate(pos);
@@ -17,7 +17,19 @@ int negamax(Position& pos, int depth, int alpha, int beta)
     for (const Move& m : moves)
     {
         pos.makeMove(m);
-        int score = -negamax(pos, depth - 1, -beta, -alpha);
+
+        int score;
+        if (movesMadeThisTurn + 1 < 2)
+        {
+            // Not finished turn yet, same player continues
+            score = negamax(pos, depth, alpha, beta, movesMadeThisTurn + 1);
+        }
+        else
+        {
+            // Finished turn, switch player and decrease depth
+            score = -negamax(pos, depth - 1, -beta, -alpha, 0);
+        }
+
         pos.undoMove();
 
         if (score >= beta)

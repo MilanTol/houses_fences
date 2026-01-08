@@ -67,25 +67,26 @@ public:
             input.mouseClicked = false;
 
             if (displayed_position.turn.current == 2)
-            {               
-            int depth = 6;
-            
-            Move bestMove = findBestMove(displayed_position, depth);
-            displayed_position.makeMove(bestMove);
+            {            
+                int depth = 3;
+                
+                Move bestMove = findBestMove(displayed_position, depth);
+                displayed_position.makeMove(bestMove);
 
-            positions.push_back(displayed_position);
-            turns_played += 1;
-            displayed_position_id = turns_played;
+                positions.push_back(displayed_position);
+                turns_played += 1;
+                displayed_position_id = turns_played;
 
-            bestMove = findBestMove(displayed_position, depth);
-            displayed_position.makeMove(bestMove);
+                bestMove = findBestMove(displayed_position, depth);
+                displayed_position.makeMove(bestMove);
 
-            positions.push_back(displayed_position);
-            turns_played += 1;
-            displayed_position_id = turns_played;
+                positions.push_back(displayed_position);
+                turns_played += 1;
+                displayed_position_id = turns_played;
 
-            int eval = negamax(displayed_position, depth, -10000, 10000);
-            std::cout << eval << std::endl;
+                // int eval = -negamax(displayed_position, depth, -10000, 10000);
+                int eval = evaluate(displayed_position);
+                std::cout << eval << std::endl;
             }
         }
         
