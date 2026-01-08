@@ -57,7 +57,7 @@ public:
         else if (input.mouseClicked and displayed_position_id == turns_played) // if clicked
         {   
             ColumnRow clicked_square = ColumnRow(sf::Mouse::getPosition(window));
-            displayed_position.execMove(Move(clicked_square.column + cfg::grid_size.x * clicked_square.row));
+            displayed_position.makeMove(Move(clicked_square.column + cfg::grid_size.x * clicked_square.row));
             
             positions.push_back(displayed_position);
             turns_played += 1;

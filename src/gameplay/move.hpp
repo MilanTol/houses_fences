@@ -2,8 +2,8 @@
 
 struct Move
 {
-    char square_id;
+    char square;
 
-    Move(): square_id(-1) {}
-    Move(char input_id): square_id(input_id) {}
+    Move(): square(-1) {}
+    Move(char input_id): square(input_id) {}
 };
