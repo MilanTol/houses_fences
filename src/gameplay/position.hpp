@@ -10,20 +10,11 @@ struct Position
     Square squares[cfg::grid_size.x * cfg::grid_size.y];
     Turn turn;
 
-    //simplify looking up squares by using "at" function.
-    inline Square& at(int column, int row) 
-    {
-        return squares[column + row*cfg::grid_size.x];
-    }
-
     Position()
     {
-        for (int column = 0; column < cfg::grid_size.x; column++)
+        for (int i = 0; i < cfg::grid_size.x * cfg::grid_size.y; i++)
         {
-            for (int row = 0; row < cfg::grid_size.y; row++)
-            {
-                at(column, row) = Square();
-            }
+            squares[i] = Square();
         }
     }
 
@@ -39,13 +30,10 @@ struct Position
         if (turn.move_counter == cfg::max_moves - 1 and
             turn.destroy_counter == 0)
         {
-            for (int column = 0; column < cfg::grid_size.x; column++)
+            for (int i = 0; i < cfg::grid_size.x * cfg::grid_size.y; i++)
             {
-                for (int row = 0; row < cfg::grid_size.y; row++)
-                {
-                    if (at(column, row).fence == turn.other)
-                        at(column, row).fence = 0;
-                }
+                if (squares[i].fence == turn.other)
+                    squares[i].fence = 0;
             }
         }
     }    
@@ -72,6 +60,33 @@ struct Position
         {
             destroyHouse(move);
         }
+    }
+
+    std::array<bool, cfg::grid_size.x * cfg::grid_size.y> legalMoves() 
+    {
+        std::array<bool, cfg::grid_size.x * cfg::grid_size.y> result;
+
+        for (int i = 0; i < cfg::grid_size.x * cfg::grid_size.y; i++)
+        {
+            if (squares[i].fence != turn.current and squares[i].house == turn.current)
+            {
+                //if house is of other player check whether destroy counter is not reached
+                if (squares[i].house == turn.other) 
+                {
+                    result[i] = (turn.destroy_counter < cfg::max_destroy);
+                }
+
+                else
+                {
+                    result[i] = true;
+                }
+
+            }
+
+            result[i] = false;
+        }
+
+        return result;
     }
 
 };

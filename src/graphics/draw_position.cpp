@@ -16,11 +16,10 @@ void drawSquareContent(sf::RenderWindow& window, Square square, int column, int 
 
 void drawPosition(sf::RenderWindow& window, Position& position)
 {
-    for (int column = 0; column < cfg::grid_size.x; column++)
+    for (int i = 0; i < cfg::grid_size.x * cfg::grid_size.y; i++)
     {
-        for (int row = 0; row < cfg::grid_size.y; row++)
-        {
-            drawSquareContent(window, position.at(column, row), column, row);
-        }
+        int column = i % cfg::grid_size.x;
+        int row = (i - column)/cfg::grid_size.y;
+        drawSquareContent(window, position.squares[i], column, row);
     }
 }
