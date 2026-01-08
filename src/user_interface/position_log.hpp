@@ -7,6 +7,8 @@
 #include "../gameplay/move.hpp"
 
 #include "../engine/evaluation.hpp"
+#include "../engine/find_best_move.hpp"
+
 
 struct ColumnRow
 {
@@ -63,6 +65,9 @@ public:
             turns_played += 1;
             displayed_position_id = turns_played;
             input.mouseClicked = false;
+
+            std::cout << evaluate(displayed_position) << std::endl;
+            std::cout << findBestMove(displayed_position, 1).square << std::endl;
         }
         
         if (input.downPressed and turns_played > 0)

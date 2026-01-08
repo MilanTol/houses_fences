@@ -8,7 +8,6 @@
 #include "config.hpp"
 #include "gameplay/square.hpp"
 
-
 Input input;
 
 int main()

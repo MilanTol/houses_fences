@@ -7,8 +7,8 @@ int destroyPotentialScore(const Position& position);
 
 constexpr int HOUSE_VALUE          = 10;
 constexpr int FENCE_VALUE          = 3;
-constexpr int MOBILITY_VALUE       = 10;
-constexpr int DESTROY_POTENTIAL    = 10;
+constexpr int MOBILITY_VALUE       = 2;
+constexpr int DESTROY_POTENTIAL    = 7;
 
 
 int evaluate(const Position& pos)

@@ -5,19 +5,22 @@
 #include "move.hpp"
 #include "../config.hpp"
 
-struct Undo {
+struct Undo
+{
+    Turn oldTurn;
     int square;
     int oldHouse;
     int oldFence;
-    Turn oldTurn;
+    std::vector<int> clearedFences; // squares where fences were destroyed
 };
+
 
 struct Position
 {
     Square squares[cfg::grid_size.x * cfg::grid_size.y];
     Turn turn;
 
-    Undo undo;
+    std::vector<Undo> undoStack;
 
     Position()
     {
@@ -57,6 +60,29 @@ struct Position
     
     void makeMove(const Move move)
     {
+        Undo undo;
+
+        undo.square = move.square;
+        undo.oldHouse = squares[move.square].house;
+        undo.oldFence = squares[move.square].fence;
+        undo.oldTurn = turn;
+
+        //check whether fences will be destroyed --> store squares on which fences were removed.
+        if (squares[move.square].house == turn.other &&
+             squares[move.square].fence != turn.other &&
+             turn.destroy_counter < cfg::max_destroy)
+        {
+            for (int i=0; i < cfg::grid_size.x * cfg::grid_size.y; i++)
+            {
+                if (squares[i].fence == turn.other)
+                {
+                    undo.clearedFences.push_back(i);
+                }
+            }
+        }
+
+        undoStack.push_back(undo);
+
         if (squares[move.square].house == 0 and
             squares[move.square].fence != turn.other)
         {
@@ -69,22 +95,24 @@ struct Position
         {
             destroyHouse(move);
         }
-
-        else
-            return;
-
-        undo.square = move.square;
-        undo.oldHouse = squares[move.square].house;
-        undo.oldFence = squares[move.square].fence;
-        undo.oldTurn = turn;
     }
 
-    void undoMove(const Undo& u)
+    void undoMove()
     {
+        const Undo& u = undoStack.back();
+
         squares[u.square].house = u.oldHouse;
         squares[u.square].fence = u.oldFence;
+
+        for (int square_id : u.clearedFences)
+            squares[square_id].fence = turn.other;
+
         turn = u.oldTurn;
+
+        undoStack.pop_back();
     }
+
+
 
     std::array<bool, cfg::grid_size.x * cfg::grid_size.y> legalMoves() const
     {
