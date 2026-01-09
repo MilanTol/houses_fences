@@ -4,4 +4,4 @@
 #include "evaluation.hpp"
 
 Move findBestMove(Position& pos, int depth);
-int negamax(Position& pos, int depth, int alpha, int beta);
+int alphabeta(Position& pos, int depth, int alpha, int beta);

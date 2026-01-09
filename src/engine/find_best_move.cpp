@@ -4,52 +4,68 @@
 
 constexpr int eval_infty = 10000;
 
+int nodes_searched = 0;
+int nodes_pruned = 0;
+
 int alphabeta(Position& pos, int depth, int alpha, int beta)
 {   
     int score = 0;
 
-    std::vector<Move> legal_moves = pos.generateMoves();
-    
-    if (depth == 0 or legal_moves.size() == 0)
-    {
+    if (depth == 0)
+    {   
         return evaluate(pos);
     }
 
-    for (Move move : legal_moves)
+    std::vector<Move> legal_moves = pos.generateMoves();
+
+    if (legal_moves.size() == 0)
     {   
+        std::cout << "no legal moves at depth " << depth << std::endl;
+        return evaluate(pos);
+    }
+
+    for (const Move& move : legal_moves)
+    {   
+        nodes_searched++;
+
         pos.makeMove(move);
 
         if (pos.turn.move_counter == 0)
         {
             score = -alphabeta(pos, depth - 1, -beta, -alpha);
-
-            if (score > -beta)
-                beta = score;  
         }
 
         else
         {
-            score = alphabeta(pos, depth, alpha, beta);
+            score = alphabeta(pos, depth - 1, alpha, beta);
         }
         
         pos.undoMove();
-    }
 
-    if (score > alpha)
-        alpha = score;
+        if (score > alpha)
+            alpha = score;
+
+        if (alpha > beta - 1)
+        {
+            nodes_pruned += (int)legal_moves.size() - 1; // siblings skipped            
+            break;   
+        }
+    }
 
     return alpha;
 }
 
 Move findBestMove(Position& pos, int depth)
-{
+{   
+    nodes_pruned = 0;
+    nodes_searched = 0;
+    
     Move bestMove;
     int score = -eval_infty;
     std::vector<Move> legal_moves = pos.generateMoves();
 
-    for (Move move : legal_moves)
+    for (const Move& move : legal_moves)
     {   
-        std::cout << "considering move " << move.square << std::endl;
         pos.makeMove(move);
         
         int move_eval;
@@ -58,21 +74,28 @@ Move findBestMove(Position& pos, int depth)
         {
             move_eval = -alphabeta(pos, depth - 1, -eval_infty, eval_infty);
         }
-
         else
         {
-            move_eval = alphabeta(pos, depth, -eval_infty, eval_infty);
+            move_eval = alphabeta(pos, depth - 1, -eval_infty, eval_infty);
         }
 
         if (score < move_eval)
         {
             score = move_eval;
             bestMove = move;
-            std::cout << move_eval << std::endl;
         }
 
         pos.undoMove();    
     }
 
+    std::cout << "Nodes searched: " << nodes_searched << std::endl;
+    std::cout << "Nodes pruned:   " << nodes_pruned << std::endl;
+
+    double ratio = (double)nodes_pruned / (nodes_searched + nodes_pruned);
+    std::cout << "Pruning ratio:  " << ratio << std::endl;
+
     return bestMove;
+    
 }
+
+

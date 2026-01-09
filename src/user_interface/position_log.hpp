@@ -68,7 +68,7 @@ public:
 
             if (displayed_position.turn.current == 2)
             {            
-                int depth = 2;
+                int depth = cfg::engine_depth;
                 
                 Move bestMove = findBestMove(displayed_position, depth);
                 displayed_position.makeMove(bestMove);
@@ -84,8 +84,7 @@ public:
                 turns_played += 1;
                 displayed_position_id = turns_played;
 
-                // int eval = -negamax(displayed_position, depth, -10000, 10000);
-                int eval = evaluate(displayed_position);
+                int eval = alphabeta(displayed_position, depth, -10000, 10000);
                 std::cout << eval << std::endl;
             }
         }
