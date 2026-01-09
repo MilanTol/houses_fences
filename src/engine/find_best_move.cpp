@@ -2,63 +2,76 @@
 #include "../gameplay/position.hpp"
 #include "evaluation.hpp"
 
-constexpr int min_eval = -10000;
+constexpr int eval_infty = 10000;
 
-int negamax(Position& pos, int depth, int alpha, int beta, int movesMadeThisTurn = 0)
-{
-    if (depth == 0)
-        return evaluate(pos);
+int alphabeta(Position& pos, int depth, int alpha, int beta)
+{   
+    int score = 0;
 
-    std::vector<Move> moves = pos.generateMoves();
-
-    if (moves.empty())
-        return evaluate(pos);
-
-    for (const Move& m : moves)
+    std::vector<Move> legal_moves = pos.generateMoves();
+    
+    if (depth == 0 or legal_moves.size() == 0)
     {
-        pos.makeMove(m);
+        return evaluate(pos);
+    }
 
-        int score;
-        if (movesMadeThisTurn + 1 < 2)
+    for (Move move : legal_moves)
+    {   
+        pos.makeMove(move);
+
+        if (pos.turn.move_counter == 0)
         {
-            // Not finished turn yet, same player continues
-            score = negamax(pos, depth, alpha, beta, movesMadeThisTurn + 1);
+            score = -alphabeta(pos, depth - 1, -beta, -alpha);
+
+            if (score > -beta)
+                beta = score;  
         }
+
         else
         {
-            // Finished turn, switch player and decrease depth
-            score = -negamax(pos, depth - 1, -beta, -alpha, 0);
+            score = alphabeta(pos, depth, alpha, beta);
         }
-
+        
         pos.undoMove();
-
-        if (score >= beta)
-            return beta;
-
-        alpha = std::max(alpha, score);
     }
+
+    if (score > alpha)
+        alpha = score;
 
     return alpha;
 }
 
 Move findBestMove(Position& pos, int depth)
 {
-    Move bestMove{};
-    int bestScore = min_eval;
+    Move bestMove;
+    int score = -eval_infty;
+    std::vector<Move> legal_moves = pos.generateMoves();
 
-    std::vector<Move> moves = pos.generateMoves();
+    for (Move move : legal_moves)
+    {   
+        std::cout << "considering move " << move.square << std::endl;
+        pos.makeMove(move);
+        
+        int move_eval;
 
-    for (const Move& m : moves)
-    {
-        pos.makeMove(m);
-        int score = -negamax(pos, depth - 1, min_eval, -min_eval);
-        pos.undoMove();
-
-        if (score > bestScore)
+        if (pos.turn.move_counter == 0)
         {
-            bestScore = score;
-            bestMove = m;
+            move_eval = -alphabeta(pos, depth - 1, -eval_infty, eval_infty);
         }
+
+        else
+        {
+            move_eval = alphabeta(pos, depth, -eval_infty, eval_infty);
+        }
+
+        if (score < move_eval)
+        {
+            score = move_eval;
+            bestMove = move;
+            std::cout << move_eval << std::endl;
+        }
+
+        pos.undoMove();    
     }
 
     return bestMove;

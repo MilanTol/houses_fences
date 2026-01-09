@@ -68,7 +68,7 @@ public:
 
             if (displayed_position.turn.current == 2)
             {            
-                int depth = 3;
+                int depth = 2;
                 
                 Move bestMove = findBestMove(displayed_position, depth);
                 displayed_position.makeMove(bestMove);

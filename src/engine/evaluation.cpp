@@ -21,20 +21,28 @@ int houseScore(const Position& pos)
     int score = 0;
     const int total_squares = cfg::grid_size.x * cfg::grid_size.y;
 
+    if (pos.squares[5].house == pos.turn.current)
+        score += HOUSE_VALUE;
+
+
+    if (pos.squares[6].house == pos.turn.current)
+        score += HOUSE_VALUE;
+
+
+    if (pos.squares[9].house == pos.turn.current)
+        score += HOUSE_VALUE;
+
+
     if (pos.squares[10].house == pos.turn.current)
         score += HOUSE_VALUE;
 
 
-    if (pos.squares[11].house == pos.turn.current)
-        score += HOUSE_VALUE;
+    if (pos.squares[5].house == pos.turn.other)
+        score -= HOUSE_VALUE;
 
 
-    if (pos.squares[12].house == pos.turn.current)
-        score += HOUSE_VALUE;
-
-
-    if (pos.squares[13].house == pos.turn.current)
-        score += HOUSE_VALUE;
+    if (pos.squares[6].house == pos.turn.other)
+        score -= HOUSE_VALUE;
 
 
     if (pos.squares[10].house == pos.turn.other)
@@ -42,14 +50,6 @@ int houseScore(const Position& pos)
 
 
     if (pos.squares[11].house == pos.turn.other)
-        score -= HOUSE_VALUE;
-
-
-    if (pos.squares[12].house == pos.turn.other)
-        score -= HOUSE_VALUE;
-
-
-    if (pos.squares[13].house == pos.turn.other)
         score -= HOUSE_VALUE;
         
 
