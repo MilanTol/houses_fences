@@ -1,7 +1,7 @@
 #include "../gameplay/position.hpp"
 
-constexpr int SCORE_2 = 20;
-constexpr int SCORE_3 = 200;
+constexpr int SCORE_2 = 50;
+constexpr int SCORE_3 = 400;
 
 int countLine(const Position& pos, int start, int dx, int dy, int player)
 {
@@ -10,10 +10,15 @@ int countLine(const Position& pos, int start, int dx, int dy, int player)
     int x = start % cfg::grid_size.x;
     int y = start / cfg::grid_size.x;
 
-    while (true)
+    if (pos.squares[y*cfg::grid_size.x + x].house != player)
     {
-        int nx = x + dx * count;
-        int ny = y + dy * count;
+        return 0;
+    }
+
+    for (int i=0; ; i++)
+    {
+        int nx = x + dx * i;
+        int ny = y + dy * i;
 
         if (nx < 0 || ny < 0 ||
             nx >= cfg::grid_size.x || ny >= cfg::grid_size.y)
@@ -24,10 +29,6 @@ int countLine(const Position& pos, int start, int dx, int dy, int player)
         if (pos.squares[idx].house == player)
         {
             count++;
-        }
-        else
-        {
-            break;
         }
     }
 

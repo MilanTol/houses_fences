@@ -31,7 +31,7 @@ struct Turn
     {
         move_counter++;
 
-        if (move_counter == cfg::max_moves)
+        if (move_counter >= cfg::max_moves)
         {
             end();
         }

@@ -5,7 +5,7 @@ using Clock = std::chrono::steady_clock;
 #include "../gameplay/position.hpp"
 #include "evaluation.hpp"
 
-constexpr int eval_infty = 1000000;
+constexpr int eval_infty = 10000000;
 constexpr int win_eval = eval_infty/10;
 constexpr int depth_eval = eval_infty/100;
 
@@ -35,7 +35,6 @@ int alphabeta(Position& pos, int depth, int alpha, int beta)
 
     if (legal_moves.size() == 0)
     {   
-        std::cout << "no legal moves at depth " << depth << std::endl;
         return evaluate(pos);
     }
 
@@ -52,7 +51,7 @@ int alphabeta(Position& pos, int depth, int alpha, int beta)
 
         else
         {
-            score = alphabeta(pos, depth - 1, alpha, beta);
+            score = alphabeta(pos, depth, alpha, beta);
         }
         
         pos.undoMove();
@@ -78,7 +77,7 @@ Move findBestMove(Position& pos, int maxTimeMs)
     int score = -eval_infty;
     std::vector<Move> legal_moves = pos.generateMoves();
 
-    for (int depth = 1; ; depth++)
+    for (int depth = 1; ; depth ++)
     {
         std::cout << "depth reached: " << depth << std::endl;
         std::cout << "score: " << score << std::endl;
@@ -93,9 +92,10 @@ Move findBestMove(Position& pos, int maxTimeMs)
             {
                 move_eval = -alphabeta(pos, depth, -eval_infty, eval_infty);
             }
+
             else
             {
-                move_eval = alphabeta(pos, depth, -eval_infty, eval_infty);
+                move_eval = alphabeta(pos, depth + 1, -eval_infty, eval_infty);
             }
         
             pos.undoMove();  
@@ -116,6 +116,7 @@ Move findBestMove(Position& pos, int maxTimeMs)
                 return bestMove;
             }
         }
+
     }
 
     return bestMove;
