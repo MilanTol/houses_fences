@@ -90,7 +90,7 @@ public:
             if (current_position.turn.current == 1)
             {            
                 input.mouseClicked = false;
-                int depth = cfg::engine_depth + turns_played/14;
+                int depth = cfg::engine_depth;
                 
                 Move bestMove = findBestMove(current_position, depth);
                 current_position.makeMove(bestMove);
@@ -102,7 +102,7 @@ public:
             else if (current_position.turn.current == 2)// and input.mouseClicked)
             {            
                 input.mouseClicked = false;
-                int depth = cfg::engine_depth + turns_played/6;
+                int depth = cfg::engine_depth;
                 
                 Move bestMove = findBestMove(current_position, depth);
                 current_position.makeMove(bestMove);
