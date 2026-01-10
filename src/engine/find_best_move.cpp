@@ -67,7 +67,7 @@ int alphabeta(Position& pos, int depth, int alpha, int beta)
     return alpha;
 }
 
-Move findBestMove(Position& pos, int maxTimeMs)
+Move findBestMove(Position& pos, int depth)
 {   
     nodes_pruned = 0;
     nodes_searched = 0;
@@ -91,7 +91,7 @@ Move findBestMove(Position& pos, int maxTimeMs)
             move_eval = alphabeta(pos, depth - 1, -eval_infty, eval_infty);
         }
 
-        if (score < move_eval)
+        if (move_eval > score)
         {
             score = move_eval;
             bestMove = move;

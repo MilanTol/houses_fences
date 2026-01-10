@@ -94,6 +94,8 @@ public:
                 positions.push_back(current_position);
                 turns_played += 1;
             }
+
+            displayed_position_id = turns_played;
         }
 
         else if (gameHasEnded == false)
