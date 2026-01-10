@@ -69,9 +69,6 @@ int alphabeta(Position& pos, int depth, int alpha, int beta)
 
 Move findBestMove(Position& pos, int depth)
 {   
-    nodes_pruned = 0;
-    nodes_searched = 0;
-
     Move bestMove;
     int score = -eval_infty;
     std::vector<Move> legal_moves = pos.generateMoves();
@@ -97,14 +94,13 @@ Move findBestMove(Position& pos, int depth)
             bestMove = move;
         }
 
-        pos.undoMove();    
+        pos.undoMove();  
+        
+        if (score > win_eval)
+        {
+            return bestMove;
+        }
     }
-
-    std::cout << "Nodes searched: " << nodes_searched << std::endl;
-    std::cout << "Nodes pruned:   " << nodes_pruned << std::endl;
-
-    double ratio = (double)nodes_pruned / (nodes_searched + nodes_pruned);
-    std::cout << "Pruning ratio:  " << ratio << std::endl;
 
     return bestMove;
     

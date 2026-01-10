@@ -1,3 +1,6 @@
+#include <random>
+std::random_device rd;
+std::mt19937 rng(rd());
 
 #include "input.hpp"
 
@@ -48,10 +51,23 @@ public:
         displayed_position_id(0)
     {
         positions.push_back(Position());
+
+        for (int i = 0; i < 4; ++i)
+        {
+            std::vector<Move> legal_moves = current_position.generateMoves();
+            if (legal_moves.empty())
+                break;
+
+            std::uniform_int_distribution<size_t> dist(0, legal_moves.size() - 1);
+            Move move = legal_moves[dist(rng)];
+
+            current_position.makeMove(move);
+            turns_played++;
+            positions.push_back(current_position);
+        }
+
         displayed_position = positions[displayed_position_id];
         current_position = positions[turns_played];
-        current_position.makeMove(11);
-        current_position.makeMove(10);
     }
 
     void processEvents(sf::RenderWindow& window, Input& input)
