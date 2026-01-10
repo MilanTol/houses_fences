@@ -2,7 +2,7 @@
 #include "../gameplay/position.hpp"
 #include "evaluation.hpp"
 
-constexpr int eval_infty = 10000;
+constexpr int eval_infty = 100000;
 
 int nodes_searched = 0;
 int nodes_pruned = 0;
