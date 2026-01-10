@@ -36,9 +36,12 @@ public:
 
     std::vector<Position> positions;   
     Position displayed_position;
-
+    Position current_position;
+    
     int turns_played;
-    int displayed_position_id;   
+    int displayed_position_id;  
+    
+    bool gameHasEnded = false;
 
     Position_Log():
         turns_played(0),
@@ -46,17 +49,15 @@ public:
     {
         positions.push_back(Position());
         displayed_position = positions[displayed_position_id];
+        current_position = positions[turns_played];
+        current_position.makeMove(11);
+        current_position.makeMove(10);
     }
 
     void processEvents(sf::RenderWindow& window, Input& input)
     {
-        if (input.mouseClicked and not (displayed_position_id == turns_played))
-        {
-            input.mouseClicked = false;
-            displayed_position_id = turns_played;
-        }
-        
-        // else if (input.mouseClicked and displayed_position_id == turns_played) // if clicked
+       
+        // else if (input.mouseClicked and displayed_position_id == turns_played and displayed_position.turn.current == 1) // if clicked
         // {   
         //     ColumnRow clicked_square = ColumnRow(sf::Mouse::getPosition(window));
         //     displayed_position.makeMove(Move(clicked_square.column + cfg::grid_size.x * clicked_square.row));
@@ -68,30 +69,37 @@ public:
 
         // }
 
-        if (displayed_position.turn.current == 1 and input.mouseClicked)
-        {            
-            input.mouseClicked = false;
-            int depth = cfg::engine_depth;
-            
-            Move bestMove = findBestMove(displayed_position, depth);
-            displayed_position.makeMove(bestMove);
+        if ((playerWin(current_position) == 0))
+        {
+            if (current_position.turn.current == 1)
+            {            
+                input.mouseClicked = false;
+                int depth = cfg::engine_depth + turns_played/14;
+                
+                Move bestMove = findBestMove(current_position, depth);
+                current_position.makeMove(bestMove);
 
-            positions.push_back(displayed_position);
-            turns_played += 1;
-            displayed_position_id = turns_played;
+                positions.push_back(current_position);
+                turns_played += 1;
+            }
+
+            else if (current_position.turn.current == 2)// and input.mouseClicked)
+            {            
+                input.mouseClicked = false;
+                int depth = cfg::engine_depth + turns_played/6;
+                
+                Move bestMove = findBestMove(current_position, depth);
+                current_position.makeMove(bestMove);
+
+                positions.push_back(current_position);
+                turns_played += 1;
+            }
         }
 
-        if (displayed_position.turn.current == 2 and input.mouseClicked)
-        {            
-            input.mouseClicked = false;
-            int depth = cfg::engine_depth;
-            
-            Move bestMove = findBestMove(displayed_position, depth);
-            displayed_position.makeMove(bestMove);
-
-            positions.push_back(displayed_position);
-            turns_played += 1;
-            displayed_position_id = turns_played;
+        else if (gameHasEnded == false)
+        {
+            std::cout << "player " << playerWin(current_position) << " wins!" << std::endl;
+            gameHasEnded = true;
         }
         
         if (input.downPressed and turns_played > 0)

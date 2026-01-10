@@ -2,7 +2,6 @@
 
 constexpr int SCORE_2 = 20;
 constexpr int SCORE_3 = 200;
-constexpr int SCORE_4 = 10000;
 
 int countLine(const Position& pos, int start, int dx, int dy, int player)
 {
@@ -42,7 +41,6 @@ int evaluateLine(const Position& pos, int start, int dx, int dy, int player)
 
     if (count == 2) score += SCORE_2;
     else if (count == 3) score += SCORE_3;
-    else if (count >= 4) score += SCORE_4;
 
     return score;
 }
