@@ -2,7 +2,9 @@
 #include "../gameplay/position.hpp"
 #include "evaluation.hpp"
 
-constexpr int eval_infty = 100000;
+constexpr int eval_infty = 1000000;
+constexpr int win_eval = eval_infty/10;
+constexpr int depth_eval = eval_infty/100;
 
 int nodes_searched = 0;
 int nodes_pruned = 0;
@@ -11,12 +13,12 @@ int alphabeta(Position& pos, int depth, int alpha, int beta)
 {   
     if (pos.turn.current == playerWin(pos))
     {
-        return (eval_infty - 1);
+        return win_eval + depth_eval*depth;
     }
 
     if (pos.turn.other == playerWin(pos))
     {
-        return -(eval_infty - 1);
+        return -(win_eval + depth_eval*depth);
     }
 
     int score = 0;
@@ -65,7 +67,7 @@ int alphabeta(Position& pos, int depth, int alpha, int beta)
     return alpha;
 }
 
-Move findBestMove(Position& pos, int depth)
+Move findBestMove(Position& pos, int maxTimeMs)
 {   
     nodes_pruned = 0;
     nodes_searched = 0;
