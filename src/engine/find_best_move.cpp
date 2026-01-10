@@ -1,4 +1,7 @@
 
+#include <chrono>
+using Clock = std::chrono::steady_clock;
+
 #include "../gameplay/position.hpp"
 #include "evaluation.hpp"
 
@@ -11,12 +14,12 @@ int nodes_pruned = 0;
 
 int alphabeta(Position& pos, int depth, int alpha, int beta)
 {   
-    if (pos.turn.current == playerWin(pos))
+    if (playerWin(pos) == pos.turn.current)
     {
         return win_eval + depth_eval*depth;
     }
 
-    if (pos.turn.other == playerWin(pos))
+    if (playerWin(pos) == pos.turn.other)
     {
         return -(win_eval + depth_eval*depth);
     }
@@ -67,38 +70,51 @@ int alphabeta(Position& pos, int depth, int alpha, int beta)
     return alpha;
 }
 
-Move findBestMove(Position& pos, int depth)
+Move findBestMove(Position& pos, int maxTimeMs)
 {   
+    Clock::time_point start_time = Clock::now();
+
     Move bestMove;
     int score = -eval_infty;
     std::vector<Move> legal_moves = pos.generateMoves();
 
-    for (const Move& move : legal_moves)
-    {   
-        pos.makeMove(move);
+    for (int depth = 1; ; depth++)
+    {
+        std::cout << "depth reached: " << depth << std::endl;
+        std::cout << "score: " << score << std::endl;
+
+        for (const Move& move : legal_moves)
+        {   
+            pos.makeMove(move);
+            
+            int move_eval;
+    
+            if (pos.turn.move_counter == 0)
+            {
+                move_eval = -alphabeta(pos, depth, -eval_infty, eval_infty);
+            }
+            else
+            {
+                move_eval = alphabeta(pos, depth, -eval_infty, eval_infty);
+            }
         
-        int move_eval;
+            pos.undoMove();  
 
-        if (pos.turn.move_counter == 0)
-        {
-            move_eval = -alphabeta(pos, depth - 1, -eval_infty, eval_infty);
-        }
-        else
-        {
-            move_eval = alphabeta(pos, depth - 1, -eval_infty, eval_infty);
-        }
+            if (move_eval > score)
+            {
+                score = move_eval;
+                bestMove = move;
 
-        if (move_eval > score)
-        {
-            score = move_eval;
-            bestMove = move;
-        }
-
-        pos.undoMove();  
-        
-        if (score > win_eval)
-        {
-            return bestMove;
+                if (score > win_eval)
+                {
+                    return bestMove;
+                }
+            }
+            
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - start_time).count() > maxTimeMs)
+            {   
+                return bestMove;
+            }
         }
     }
 

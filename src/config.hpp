@@ -17,5 +17,6 @@ int const max_destroy = 1;
 
 int const win_condition = 4;
 int const engine_depth = 6;
+int const maxTimeMs = 2000;
 
 }

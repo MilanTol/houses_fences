@@ -90,9 +90,9 @@ public:
             if (current_position.turn.current == 1)
             {            
                 input.mouseClicked = false;
-                int depth = cfg::engine_depth;
+                int maxTimeMs = cfg::maxTimeMs;
                 
-                Move bestMove = findBestMove(current_position, depth);
+                Move bestMove = findBestMove(current_position, maxTimeMs);
                 current_position.makeMove(bestMove);
 
                 positions.push_back(current_position);
@@ -102,9 +102,9 @@ public:
             else if (current_position.turn.current == 2)// and input.mouseClicked)
             {            
                 input.mouseClicked = false;
-                int depth = cfg::engine_depth;
+                int maxTimeMs = cfg::maxTimeMs;
                 
-                Move bestMove = findBestMove(current_position, depth);
+                Move bestMove = findBestMove(current_position, maxTimeMs);
                 current_position.makeMove(bestMove);
 
                 positions.push_back(current_position);
