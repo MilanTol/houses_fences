@@ -16,6 +16,6 @@ int const max_moves = 2;
 int const max_destroy = 1;
 
 int const win_condition = 4;
-int const engine_depth = 6;
+int const engine_depth = 7;
 
 }

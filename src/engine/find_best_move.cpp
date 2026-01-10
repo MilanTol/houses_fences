@@ -9,6 +9,16 @@ int nodes_pruned = 0;
 
 int alphabeta(Position& pos, int depth, int alpha, int beta)
 {   
+    if (pos.turn.current == playerWin(pos))
+    {
+        return (eval_infty - 1);
+    }
+
+    if (pos.turn.other == playerWin(pos))
+    {
+        return -(eval_infty - 1);
+    }
+
     int score = 0;
 
     if (depth == 0)
@@ -59,7 +69,7 @@ Move findBestMove(Position& pos, int depth)
 {   
     nodes_pruned = 0;
     nodes_searched = 0;
-    
+
     Move bestMove;
     int score = -eval_infty;
     std::vector<Move> legal_moves = pos.generateMoves();

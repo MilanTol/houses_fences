@@ -56,37 +56,42 @@ public:
             displayed_position_id = turns_played;
         }
         
-        else if (input.mouseClicked and displayed_position_id == turns_played) // if clicked
-        {   
-            ColumnRow clicked_square = ColumnRow(sf::Mouse::getPosition(window));
-            displayed_position.makeMove(Move(clicked_square.column + cfg::grid_size.x * clicked_square.row));
+        // else if (input.mouseClicked and displayed_position_id == turns_played) // if clicked
+        // {   
+        //     ColumnRow clicked_square = ColumnRow(sf::Mouse::getPosition(window));
+        //     displayed_position.makeMove(Move(clicked_square.column + cfg::grid_size.x * clicked_square.row));
             
+        //     positions.push_back(displayed_position);
+        //     turns_played += 1;
+        //     displayed_position_id = turns_played;
+        //     input.mouseClicked = false;
+
+        // }
+
+        if (displayed_position.turn.current == 1 and input.mouseClicked)
+        {            
+            input.mouseClicked = false;
+            int depth = cfg::engine_depth;
+            
+            Move bestMove = findBestMove(displayed_position, depth);
+            displayed_position.makeMove(bestMove);
+
             positions.push_back(displayed_position);
             turns_played += 1;
             displayed_position_id = turns_played;
+        }
+
+        if (displayed_position.turn.current == 2 and input.mouseClicked)
+        {            
             input.mouseClicked = false;
+            int depth = cfg::engine_depth;
+            
+            Move bestMove = findBestMove(displayed_position, depth);
+            displayed_position.makeMove(bestMove);
 
-            if (displayed_position.turn.current == 2)
-            {            
-                int depth = cfg::engine_depth;
-                
-                Move bestMove = findBestMove(displayed_position, depth);
-                displayed_position.makeMove(bestMove);
-
-                positions.push_back(displayed_position);
-                turns_played += 1;
-                displayed_position_id = turns_played;
-
-                bestMove = findBestMove(displayed_position, depth);
-                displayed_position.makeMove(bestMove);
-
-                positions.push_back(displayed_position);
-                turns_played += 1;
-                displayed_position_id = turns_played;
-
-                int eval = alphabeta(displayed_position, depth, -10000, 10000);
-                std::cout << eval << std::endl;
-            }
+            positions.push_back(displayed_position);
+            turns_played += 1;
+            displayed_position_id = turns_played;
         }
         
         if (input.downPressed and turns_played > 0)
