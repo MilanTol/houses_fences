@@ -13,7 +13,7 @@ sf::Vector2f constexpr house_size = {static_cast<float>(square_size.x/2.5), stat
 sf::Vector2f constexpr fence_size = {static_cast<float>(square_size.x/1.5), static_cast<float>(square_size.y/1.5)};
 
 int const max_moves = 2; 
-int const max_destroy = 1;
+int const max_destroy = 2;
 
 int const win_condition = 4;
 int const engine_depth = 6;

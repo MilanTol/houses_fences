@@ -79,8 +79,6 @@ Move findBestMove(Position& pos, int maxTimeMs)
 
     for (int depth = 1; ; depth ++)
     {
-        std::cout << "depth reached: " << depth << std::endl;
-        std::cout << "score: " << score << std::endl;
 
         for (const Move& move : legal_moves)
         {   
