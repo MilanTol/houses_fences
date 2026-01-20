@@ -17,6 +17,8 @@ int const max_destroy = 1;
 
 int const win_condition = 4;
 int const engine_depth = 6;
-int const maxTimeMs = 100 * 1000;
+int const maxTimeMs = 100;
+
+int constexpr seed = 0;
 
 }
