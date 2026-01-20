@@ -69,6 +69,29 @@ int alphabeta(Position& pos, int depth, int alpha, int beta)
     return alpha;
 }
 
+
+int moveEval(Position& pos, Move move, int depth)
+{
+    pos.makeMove(move);
+    
+    int move_eval;
+
+    if (pos.turn.move_counter == 0)
+    {
+        move_eval = -alphabeta(pos, depth, -eval_infty, eval_infty);
+    }
+
+    else
+    {
+        move_eval = alphabeta(pos, depth + 1, -eval_infty, eval_infty);
+    }
+
+    pos.undoMove();  
+
+    return move_eval;
+}
+
+
 Move findBestMove(Position& pos, int maxTimeMs)
 {   
     Clock::time_point start_time = Clock::now();
@@ -82,21 +105,7 @@ Move findBestMove(Position& pos, int maxTimeMs)
 
         for (const Move& move : legal_moves)
         {   
-            pos.makeMove(move);
-            
-            int move_eval;
-    
-            if (pos.turn.move_counter == 0)
-            {
-                move_eval = -alphabeta(pos, depth, -eval_infty, eval_infty);
-            }
-
-            else
-            {
-                move_eval = alphabeta(pos, depth + 1, -eval_infty, eval_infty);
-            }
-        
-            pos.undoMove();  
+            int move_eval = moveEval(pos, move, depth);
 
             if (move_eval > score)
             {

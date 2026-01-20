@@ -52,7 +52,7 @@ public:
     {
         positions.push_back(Position());
 
-        for (int i = 0; i < 1; ++i)
+        for (int i = 0; i < 4; ++i)
         {
             std::vector<Move> legal_moves = current_position.generateMoves();
             if (legal_moves.empty())
@@ -99,17 +99,17 @@ public:
                 turns_played += 1;
             }
 
-            // else if (input.mouseClicked and displayed_position_id == turns_played) // if clicked
-            // {   
-            //     ColumnRow clicked_square = ColumnRow(sf::Mouse::getPosition(window));
-            //     current_position.makeMove(Move(clicked_square.column + cfg::grid_size.x * clicked_square.row));
+            if (input.mouseClicked and displayed_position_id == turns_played) // if clicked
+            {   
+                ColumnRow clicked_square = ColumnRow(sf::Mouse::getPosition(window));
+                current_position.makeMove(Move(clicked_square.column + cfg::grid_size.x * clicked_square.row));
                 
-            //     positions.push_back(current_position);
-            //     turns_played += 1;
-            //     displayed_position_id = turns_played;
-            //     input.mouseClicked = false;
+                positions.push_back(current_position);
+                turns_played += 1;
+                displayed_position_id = turns_played;
+                input.mouseClicked = false;
 
-            // }
+            }
 
             displayed_position_id = turns_played;
         }
